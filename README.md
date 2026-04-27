@@ -1,34 +1,58 @@
-# My Application README
+# Vaadin AI Dashboard
 
-- [ ] TODO Replace or update this README with instructions relevant to your application
+A demo showing how to build a lightweight, BI-style dashboard with Vaadin's
+AI components. Each widget — a data grid or a chart — embeds its own chat
+that drives the underlying view in natural language: ask for a query, change
+the visualization, drill into a slice, and the widget updates itself.
 
-To start the application in development mode, import it into your IDE and run the `Application` class. 
-You can also start the application from the command line by running: 
+## What's in it
+
+- **Composable dashboard** — drag, resize, and arrange grid/chart widgets on
+  a [`Dashboard`](https://vaadin.com/docs/latest/components/dashboard).
+- **Per-widget AI chat** — each widget has a popover chat backed by an
+  `AIOrchestrator` that drives a `GridAIController` or `ChartAIController`.
+- **In-memory H2 database** — seeded with a dozen demo tables (sales,
+  employees, products, stocks, project tasks, org chart, energy flow,
+  traffic heatmap, budget, sales pipeline, KPIs, expenses) covering the
+  data shapes for most chart types.
+- **Save/restore state** — snapshot dashboard layout, widget state, and
+  chat history into the Vaadin session.
+- **Pluggable LLM** — currently wired to OpenAI via LangChain4J; swap the
+  provider in `DashboardView` to use a different model.
+
+## Prerequisites
+
+- Java 21
+- A Vaadin Pro/Trial license (Charts and the Aura theme are commercial)
+- An OpenAI API key in `OPENAI_API_KEY`
+
+## Run
 
 ```bash
+export OPENAI_API_KEY=sk-...
 ./mvnw
 ```
 
-To build the application in production mode, run:
+The dashboard is served at <http://localhost:8080/dashboard>. Add a grid or
+chart widget from the toolbar, click the chat icon on a widget, and ask
+something like *"show monthly revenue by region"* or *"top 5 products by
+units sold"*.
 
-```bash
-./mvnw package
+## Project layout
+
+```
+src/main/java/com/example/
+├── Application.java                 Spring Boot entry point
+├── InMemoryDatabaseProvider.java    H2-backed DatabaseProvider
+├── DemoDataInitializer.java         Schema + seed data
+└── views/
+    ├── DashboardView.java           Top-level @Route("dashboard")
+    ├── AIDashboardWidget.java       Grid/chart widget + orchestrator
+    └── ChatLayouts.java             Chat layout factory
 ```
 
-To build a Docker image, run:
+## Notes
 
-```bash
-docker build -t my-application:latest .
-```
-
-If you use commercial components, pass the license key as a build secret:
-
-```bash
-docker build --secret id=proKey,src=$HOME/.vaadin/proKey .
-```
-
-## Getting Started
-
-The [Quick Start](https://vaadin.com/docs/v25/getting-started/quick-start) tutorial helps you get started with Vaadin in 
-around 10 minutes. This tutorial walks you through building a simple application, introducing the core concepts along 
-the way.
+- Vaadin's AI components are experimental — enabled via
+  `src/main/resources/vaadin-featureflags.properties`.
+- The OpenAI model name is hardcoded in `DashboardView`; change it there.
