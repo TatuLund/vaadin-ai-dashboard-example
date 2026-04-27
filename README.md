@@ -1,9 +1,11 @@
-# Vaadin AI Dashboard
+# Vaadin AI Dashboard Example
 
 A demo showing how to build a lightweight, BI-style dashboard with Vaadin's
 AI components. Each widget — a data grid or a chart — embeds its own chat
 that drives the underlying view in natural language: ask for a query, change
 the visualization, drill into a slice, and the widget updates itself.
+
+<img width="1110" height="911" alt="dashboard-example" src="https://github.com/user-attachments/assets/5af8b86d-8883-4492-b3f0-ba38ae0a76c9" />
 
 ## What's in it
 
@@ -23,7 +25,7 @@ the visualization, drill into a slice, and the widget updates itself.
 ## Prerequisites
 
 - Java 21
-- A Vaadin Pro/Trial license (Charts and the Aura theme are commercial)
+- A Vaadin Pro/Trial license
 - An OpenAI API key in `OPENAI_API_KEY`
 
 ## Run
@@ -35,8 +37,8 @@ export OPENAI_API_KEY=sk-...
 
 The dashboard is served at <http://localhost:8080/dashboard>. Add a grid or
 chart widget from the toolbar, click the chat icon on a widget, and ask
-something like *"show monthly revenue by region"* or *"top 5 products by
-units sold"*.
+something like _"show monthly revenue by region"_ or _"top 5 products by
+units sold"_.
 
 ## Project layout
 
