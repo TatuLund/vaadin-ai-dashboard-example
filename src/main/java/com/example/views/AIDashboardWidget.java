@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ai.chart.ChartAIController;
 import com.vaadin.flow.component.ai.chart.ChartState;
 import com.vaadin.flow.component.ai.common.ChatMessage;
@@ -25,6 +24,7 @@ import com.vaadin.flow.component.messages.MessageInput;
 import com.vaadin.flow.component.messages.MessageList;
 import com.vaadin.flow.component.popover.Popover;
 import com.vaadin.flow.component.popover.PopoverPosition;
+import com.vaadin.flow.component.popover.PopoverVariant;
 import com.vaadin.flow.component.upload.UploadManager;
 import com.vaadin.flow.dom.Style.Position;
 
@@ -72,7 +72,6 @@ public class AIDashboardWidget extends DashboardWidget {
         messageInput = new MessageInput();
         uploadManager = new UploadManager(this);
 
-        Component dataComponent;
         String systemPrompt;
         if (type == Type.GRID) {
             var grid = new Grid<AIDataRow>();
@@ -82,7 +81,7 @@ public class AIDashboardWidget extends DashboardWidget {
             if (gridState != null) {
                 gridController.restoreState(gridState);
             }
-            dataComponent = grid;
+            setContent(grid);
             systemPrompt = GRID_PROMPT + "\n\n" + UPDATE_TITLE_PROMPT;
 
             // Temporary workaround for an Aura bug
@@ -91,7 +90,7 @@ public class AIDashboardWidget extends DashboardWidget {
             grid.getStyle().setPosition(Position.ABSOLUTE);
             wrapper.getStyle().setPosition(Position.RELATIVE);
             wrapper.setSizeFull();
-            dataComponent = wrapper;
+            setContent(wrapper);
         } else {
             var chart = new Chart();
             chart.setSizeFull();
@@ -100,19 +99,17 @@ public class AIDashboardWidget extends DashboardWidget {
             if (chartState != null) {
                 chartController.restoreState(chartState);
             }
-            dataComponent = chart;
+            setContent(chart);
             systemPrompt = CHART_PROMPT + "\n\n" + UPDATE_TITLE_PROMPT;
         }
 
-        setContent(dataComponent);
-
         var chatButton = new Button(VaadinIcon.COMMENT.create());
-        chatButton.setAriaLabel("Open chat");
 
         var popover = new Popover();
         popover.setTarget(chatButton);
         popover.setPosition(PopoverPosition.END_TOP);
         popover.setModal(true);
+        popover.setThemeVariants(PopoverVariant.ARROW);
         var chat = ChatLayouts.build(messageList, messageInput,
                 uploadManager);
         chat.setWidth("420px");
