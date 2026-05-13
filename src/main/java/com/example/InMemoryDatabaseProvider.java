@@ -66,7 +66,7 @@ public class InMemoryDatabaseProvider implements DatabaseProvider {
                 - Do NOT use reserved words like VALUE, KEY, ORDER, etc. as column aliases. Use descriptive names instead (e.g. total_revenue, sale_count)
                 - All tables support standard SQL SELECT queries
                 - SALES table: use month_order column for chronological sorting (ORDER BY month_order)
-                - WEBSITE_TRAFFIC table: both columns are 0-based indices. day_of_week: 0=Monday, 1=Tuesday, 2=Wednesday, 3=Thursday, 4=Friday. hour_of_day: 0=9am, 1=10am, ..., 7=4pm. Use xAxis/yAxis categories in configuration to set the display labels.
+                - WEBSITE_TRAFFIC table: both columns are 0-ba§sed indices. day_of_week: 0=Monday, 1=Tuesday, 2=Wednesday, 3=Thursday, 4=Friday. hour_of_day: 0=9am, 1=10am, ..., 7=4pm. Use xAxis/yAxis categories in configuration to set the display labels.
                 """);
 
         } catch (SQLException e) {

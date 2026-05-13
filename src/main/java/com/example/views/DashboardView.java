@@ -3,12 +3,14 @@ package com.example.views;
 import java.util.List;
 import java.util.function.Supplier;
 
+import org.springframework.ai.chat.client.ChatClient;
+
 import com.example.InMemoryDatabaseProvider;
-import com.vaadin.flow.component.ai.provider.LLMProvider;
-import com.vaadin.flow.component.ai.provider.LangChain4JLLMProvider;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.ai.provider.LLMProvider;
+import com.vaadin.flow.component.ai.provider.SpringAILLMProvider;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.HasMenuItems;
 import com.vaadin.flow.component.contextmenu.MenuItem;
@@ -23,8 +25,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 
-import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
-
 @Route("dashboard")
 public class DashboardView extends VerticalLayout {
 
@@ -35,17 +35,14 @@ public class DashboardView extends VerticalLayout {
     private final InMemoryDatabaseProvider databaseProvider;
     private final Supplier<LLMProvider> llmProviderFactory;
 
-    public DashboardView() {
+    public DashboardView(ChatClient chatModel) {
         setSizeFull();
         setPadding(false);
         setSpacing(false);
 
         databaseProvider = new InMemoryDatabaseProvider();
 
-        var chatModel = OpenAiStreamingChatModel.builder()
-                .apiKey(System.getenv("OPENAI_API_KEY"))
-                .modelName("gpt-5.4-mini").build();
-        llmProviderFactory = () -> new LangChain4JLLMProvider(chatModel);
+        llmProviderFactory = () -> new SpringAILLMProvider(chatModel);
 
         dashboard = new Dashboard();
         dashboard.setSizeFull();

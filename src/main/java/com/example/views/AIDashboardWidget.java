@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.springframework.ai.tool.annotation.Tool;
+
 import com.vaadin.flow.component.ai.chart.ChartAIController;
 import com.vaadin.flow.component.ai.chart.ChartState;
 import com.vaadin.flow.component.ai.common.ChatMessage;
@@ -27,8 +29,6 @@ import com.vaadin.flow.component.popover.PopoverPosition;
 import com.vaadin.flow.component.popover.PopoverVariant;
 import com.vaadin.flow.component.upload.UploadManager;
 import com.vaadin.flow.dom.Style.Position;
-
-import dev.langchain4j.agent.tool.Tool;
 
 public class AIDashboardWidget extends DashboardWidget {
 
@@ -167,7 +167,7 @@ public class AIDashboardWidget extends DashboardWidget {
             List<ChatMessage> history) implements Serializable {
     }
 
-    @Tool("Update the title of the widget to better reflect its content")
+    @Tool(description = "Update the title of the widget to better reflect its content")
     private void updateTitle(String newTitle) {
         getUI().ifPresent(ui -> ui.access(() -> setTitle(newTitle)));
     }

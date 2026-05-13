@@ -53,6 +53,21 @@ src/main/java/com/example/
     └── ChatLayouts.java             Chat layout factory
 ```
 
+## Example prompts to test
+
+Show monthly revenue broken down by region as a smooth line chart with data labels, a legend at the bottom, and a title 'Regional Revenue Trends'
+
+Show a stacked column chart of total revenue per month, with one stack segment per region, data labels on each segment showing the dollar value, and the y-axis labeled 'Revenue ($)
+
+Show ACME stock prices from the stock_prices table as a candlestick chart with dates on the x-axis, and add a secondary y-axis with a column series showing the trading volume
+
+Show website traffic as a heatmap with days of the week (Monday through Friday) on the y-axis and hours (9-16) on the x-axis, using a blue-to-red color gradient, with the value shown in each cell's tooltip
+
+Show monthly revenue by region as a 3D column chart with depth, tilted 15 degrees on alpha and 25 on beta, a light gray bottom frame panel, and the title '3D Revenue Overview'
+
+Show monthly revenue by region as a column chart with the title 'Revenue by Region'
+-> Change the South series to a spline line, make it dashed with red color, and add circle markers with radius 6
+
 ## Notes
 
 - Vaadin's AI components are experimental — enabled via
