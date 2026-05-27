@@ -1,6 +1,6 @@
 package com.example;
 
-import java.time.Duration;
+import java.net.http.HttpClient;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -9,13 +9,14 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.openai.client.OpenAIClient;
-import com.openai.client.OpenAIClientAsync;
-import com.openai.client.okhttp.OpenAIOkHttpClient;
-import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
+import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 
 @Configuration
 class AiConfig {
+
+    private static final String OPENVINO_BASE_URL = "http://192.168.0.5:1234/v3";
+    // private static final String OPENVINO_BASE_URL = "http://192.168.0.18:1234/v1";
+    private static final String OPENVINO_API_KEY = "dummy";
 
     @Bean
     public ChatClient chatClient(OpenAiChatModel chatModel) {
@@ -26,31 +27,41 @@ class AiConfig {
 
     @Bean
     public OpenAiChatModel chatModel() {
-        OpenAIClient openAiClient = OpenAIOkHttpClient.builder()
-                .baseUrl("http://192.168.0.18:1234/v1")
-                .apiKey("dummy")
-                .timeout(Duration.ofMinutes(10))
-                .maxRetries(0)
-                .build();
-
-        OpenAIClientAsync openAiClientAsync = OpenAIOkHttpClientAsync.builder()
-                .baseUrl("http://192.168.0.18:1234/v1")
-                .apiKey("dummy")
-                .timeout(Duration.ofMinutes(10))
-                .maxRetries(0)
-                .build();
-
         OpenAiChatOptions options = OpenAiChatOptions.builder()
-                // .model("gemma4-it:e4b")
-                .model("google/gemma-4-26b-a4b")
+                .baseUrl(OPENVINO_BASE_URL)
+                .apiKey(OPENVINO_API_KEY)
+                // .model("OpenVINO/Qwen3-8B-int4-cw-ov")
+                .model("imperfect-follow/qwen3-14b-int4-asym-awq-ov")
                 .maxTokens(4096)
                 .temperature(0.7)
+                .topP(0.8)
+                .topK(20)
+                .presencePenalty(1.5)
                 .build();
 
         return OpenAiChatModel.builder()
-                .openAiClient(openAiClient)
-                .openAiClientAsync(openAiClientAsync)
                 .options(options)
+                .build();
+    }
+
+    @Bean
+    public OpenAiStreamingChatModel streamingChatModel() {
+        return OpenAiStreamingChatModel.builder()
+                .baseUrl(OPENVINO_BASE_URL)
+                .apiKey(OPENVINO_API_KEY)
+                // .modelName("OpenVINO/Qwen2.5-Coder-14B-Instruct-int4-ov")
+                // .modelName("OpenVINO/Qwen3-8B-int4-cw-ov")
+                .modelName("qwen3.5:9b")
+                // .modelName("imperfect-follow/qwen3-14b-int4-asym-awq-ov")
+                .maxTokens(4096)
+                .temperature(0.7)
+                .topP(0.8)
+                .presencePenalty(1.5)
+                .parallelToolCalls(false)
+                .logResponses(true)
+                .logRequests(true)
+                // .httpClientBuilder(new CustomHttpClientBuilder().httpClientBuilder(HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)))
+                .maxTokens(4096)
                 .build();
     }
 }
