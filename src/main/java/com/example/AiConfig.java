@@ -14,8 +14,8 @@ import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 @Configuration
 class AiConfig {
 
-    private static final String OPENVINO_BASE_URL = "http://192.168.0.5:1234/v3";
-    // private static final String OPENVINO_BASE_URL = "http://192.168.0.18:1234/v1";
+    // private static final String OPENVINO_BASE_URL = "http://192.168.0.5:1234/v3";
+    private static final String OPENVINO_BASE_URL = "http://127.0.0.1:1234/v1";
     private static final String OPENVINO_API_KEY = "dummy";
 
     @Bean

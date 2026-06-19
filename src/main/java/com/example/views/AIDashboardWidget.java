@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.UI;
+
 // import org.springframework.ai.tool.annotation.Tool;
 
 import com.vaadin.flow.component.ai.chart.ChartAIController;
@@ -57,6 +60,8 @@ public class AIDashboardWidget extends DashboardWidget {
     private final MessageList messageList;
     private final MessageInput messageInput;
     private final UploadManager uploadManager;
+
+    private UI ui;
 
     public AIDashboardWidget(Type type, Supplier<LLMProvider> llmProviderFactory,
             DatabaseProvider databaseProvider) {
@@ -131,12 +136,20 @@ public class AIDashboardWidget extends DashboardWidget {
                 .withMessageList(messageList).withInput(messageInput)
                 .withFileReceiver(uploadManager)
                 .withTools(this)
+                .withRequestListener(r -> ui.access(() -> messageList.addClassName("thinking")))
+                .withResponseListener(r -> ui.access(() -> messageList.removeClassName("thinking")))
                 .withController(type == Type.GRID ? gridController
                         : chartController);
         if (history != null && !history.isEmpty()) {
             builder.withHistory(history, Map.of());
         }
         orchestrator = builder.build();
+    }
+
+    @Override
+    public void onAttach(AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
+        this.ui = attachEvent.getUI();
     }
 
     public Type getType() {
